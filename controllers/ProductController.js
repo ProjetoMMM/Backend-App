@@ -8,7 +8,7 @@ module.exports = class ProductController{
     
     // criar um produto
     static async criar(req, res) {
-        const {pname, pqty, UserId} = req.body
+        const {pname, pqty, UserId, data} = req.body
 
         const reqst = false
 
@@ -35,7 +35,8 @@ module.exports = class ProductController{
             pname,
             pqty,
             reqst,
-            UserId
+            UserId,
+            data
         }
 
         console.log(product)
@@ -56,7 +57,7 @@ module.exports = class ProductController{
 
     static async getAll(req, res) {
 
-        const products = await Product.findAll({where: {reqst: true}, attributes: ['pname', 'pqty']})//, order: [['updatedAt', 'DESC']]
+        const products = await Product.findAll({where: {reqst: true}, attributes: ['pname', 'pqty', 'data']})//, order: [['updatedAt', 'DESC']]
 
         res.status(200).json({
             products,
@@ -123,7 +124,7 @@ module.exports = class ProductController{
         
         const id = req.params.id
 
-        const {pname, pqty} = req.body
+        const {pname, pqty, data} = req.body
 
         const dadosAtualizados = {}
 
@@ -164,6 +165,13 @@ module.exports = class ProductController{
             return
         }else{
             dadosAtualizados.pqty = pqty
+        }
+        if(!data){
+            res.status(422).json({message: 'A data é obrigatória!'})
+
+            return
+        }else{
+            dadosAtualizados.data = data
         }
 
         dadosAtualizados.reqst = false

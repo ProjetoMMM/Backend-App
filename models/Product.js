@@ -25,6 +25,11 @@ const Product = db.define('Product', {
     aceito: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    data: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        required: false
     }
 })
 
