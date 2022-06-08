@@ -280,4 +280,91 @@ module.exports = class UserController {
         const user = 
 
     }*/
+
+    static async redefinir (req, res) {
+        const {email, password, confirmpassword} = req.body
+
+        const verificar = await User.findOne({where: {email: email}, raw: true})
+
+        const cell = verificar.cell
+
+        const state = verificar.state
+
+        const name = verificar.name
+
+        console.log(verificar.email)
+
+        if(!verificar) {
+            res.status(422).json({
+                message: 'Não existe usuário cadastrado com esse email!'
+            })
+
+            return
+        }
+
+        if(!password) {
+            res.status(422).json({
+                message: 'Coloque uma senha!'
+            })
+
+            return
+        }
+
+        if(!email) {
+            res.status(422).json({
+                message: 'Coloque um email!'
+            })
+
+            return
+        }
+
+        if(!confirmpassword) {
+            res.status(422).json({
+                message: 'A confirmação de senha é obrigatória'
+            })
+
+            return
+        }
+
+        if(password !== confirmpassword){
+            res.status(422).json({
+                message: 'As senhas não batem!'
+            })
+
+            return
+        }
+
+        const salt = await bcrypt.genSalt(12)
+        const hashedPassword = await bcrypt.hash(password, salt) 
+
+        const updated = {
+            name,
+            email,
+            password: hashedPassword,
+            cell,
+            state,
+            agronomo: false
+        }
+        
+        console.log(updated)
+
+        try {
+
+            const updatedUser = await User.update(updated, {where: {id: verificar.id}})
+
+            //console.log(updated)
+            //console.log(updatedUser)
+
+            res.status(200).json({
+                message: 'Usuário atualizado!',
+                updatedUser
+            })
+            
+        } catch (err) {
+            res.status(500).json({
+                message: err
+            })
+            return
+        }
+    }
 }
