@@ -367,4 +367,16 @@ module.exports = class UserController {
             return
         }
     }
+
+    static async mostrar(req, res) {
+        const userId = req.body
+
+        const dados = await User.findOne({where: {id: userId}})
+
+
+        res.status(200).json({
+            message: 'Usuário encontrado!',
+            dados
+        })
+    }
 }

@@ -60,7 +60,7 @@ module.exports = class ProductController{
         const products = await Product.findAll({where: {reqst: true}, attributes: ['pname', 'pqty', 'data']})//, order: [['updatedAt', 'DESC']]
 
         res.status(200).json({
-            products,
+            products
         })
 
     }

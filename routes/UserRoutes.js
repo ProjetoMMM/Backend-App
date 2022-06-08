@@ -13,5 +13,6 @@ router.get('/checarusuario', UserController.checarUsuario)
 router.get('/:id', UserController.pegarUserId)
 router.patch('/edit/:id', verifyToken, UserController.editarUser)
 router.post('/redefinir', UserController.redefinir)
+router.get('/mostrar', UserController.mostrar)
 
 module.exports = router
